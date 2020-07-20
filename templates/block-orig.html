@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block transaction %}
+  <p>TEST: {{block}}</p>
+  <div id="block">
+    <table class="table" id="block-info">
+      <caption style="caption-side:top">Block</caption>
+      <thead>
+        <tr>
+          <th scope="col">Confirmations</th>
+          <th scope="col">Block Hash</th>
+          <th scope="col">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Confirmations</td>
+          <td>Block Hash</td>
+          <td>Timestamp</td>
+        </tr>     
+      </tbody>
+    </table>  
+    
+    <div id="block-transactions">
+      <table class="table" id="transaction-input">
+        <caption style="caption-side:top">Transactions</caption>
+        <thead>
+          <tr>
+            <th scope="col">Address</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Address</td>
+            <td>Amount</td>
+          </tr>     
+        </tbody>
+      </table>  
+    </div>
+  </div>
+{% endblock %}

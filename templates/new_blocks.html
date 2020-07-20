@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block new_blocks %}
+  <table class="table" id="new-blocks">
+    <thead>
+      <tr>
+        <th scope="col">Block</th>
+        <th scope="col">Hash</th>
+        <th scope="col">No.txes</th>
+        <th scope="col">Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for chainblock in blocks %}
+      <tr>
+        <td><a href="/blockno/{{chainblock.height}}">{{chainblock.height}}</a></td>
+        <td><a href="/block/{{chainblock.hash}}">{{chainblock.hash}}</a></td>
+        <td>{{chainblock.hash | no_txes_block}}</td>
+        <td>{{chainblock.time | datetimefilter}}</td>
+      </tr>   
+      {% endfor %}  
+    </tbody>
+  </table>  
+{% endblock %}

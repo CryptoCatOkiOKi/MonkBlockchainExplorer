@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block transaction %}
+  <!-- <p>TX: {{tx}}</p>
+  <p>INPUT: {{input}}</p>
+  <p>OUTPUT: {{output}}</p> -->
+  <div id="transaction">
+    <table class="table" id="transaction-block">
+      <caption style="caption-side:top">tx:</caption>
+      <thead>
+        <tr>
+          <th scope="col">Confirmations</th>
+          <th scope="col">Block Hash</th>
+          <th scope="col">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{tx.confirmations}}</td>
+          <td><a href="/block/{{tx.blockhash}}">{{tx.blockhash}}</a></td>
+          <td>{{tx.time | datetimefilter}}</td>
+        </tr>     
+      </tbody>
+    </table>  
+    
+    <table id="transaction-input-output">
+      <tr>
+        <td id="transaction-input">
+          <table class="table">
+            <caption style="caption-side:top">Input Addresses</caption>
+            <thead>
+              <tr>
+                <th scope="col">Address</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for data in input %}
+              <tr>
+                <td><a href="/address/{{data.address}}">{{data.address}}</a></td>
+                <td>{{data.value}}</td>
+              </tr> 
+              <tr> 
+                <th scope="row">Input TX</th>
+                <td><a href="/tx/{{data.tx_vin}}">{{data.tx_vin}}</a></td>
+              </tr>           
+              {% endfor %}    
+            </tbody>
+          </table>  
+        </td>
+        <td id="transaction-output">
+          <table class="table">
+            <caption style="caption-side:top">Recipients</caption>
+            <thead>
+              <tr>
+                <th scope="col">Address</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for data in output %}
+              <tr>
+                  {% if data['address'] %}
+                    {% for address in data['address'] %}
+                      <td><a href="/address/{{address}}">{{address}}</a></td>
+                      <td>{{data.value}}</td>
+                    {% endfor %}  
+                    {% else %}
+                    <td>CoinStake/CoinBase</td>
+                    <td></td>
+                  {% endif %}   
+              </tr>   
+              {% endfor %}    
+            </tbody>
+          </table>  
+        </td>
+      </tr>
+    </table>
+  </div>
+{% endblock %}

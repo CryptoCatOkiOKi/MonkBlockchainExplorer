@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block block %}
+  <!-- <p>BLOCK: {{block}}</p>
+  <p>TXES: {{txes}}</p> -->
+  <div id="block">
+    <table class="table" id="block-info">
+      <caption style="caption-side:top">Block</caption>
+      <tbody>
+        <tr> 
+          <th scope="row">Confirmations</th>
+          <td>{{block.confirmations}}</td>
+        </tr>
+        
+        <tr>
+          <th scope="row">Block Hash</th>
+          <td><a href="/blockno/{{block.height}}">{{block.hash}}</a></td>
+        </tr>
+        
+        <tr>
+          <th scope="row">Timestamp</th>
+          <td>{{block.time | datetimefilter}}</td>
+        </tr>
+      </tbody>
+    </table>  
+    
+    <div id="block-transactions">
+      <table class="table" id="transaction-input">
+        <caption style="caption-side:top">Transactions</caption>
+        <thead>
+          <tr>
+            <th scope="col">IDX</th>
+            <th scope="col">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for idx,tx in enumerate(txes) %}
+          <tr>
+            <td>{{idx}}</td>
+            <td><a href="/tx/{{tx}}">{{tx}}</a></td>
+          </tr>   
+          {% endfor %}    
+        </tbody>
+      </table>  
+    </div>
+  </div>
+{% endblock %}

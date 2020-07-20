@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block transaction %}
+  <!-- <p>ADDRESS: {{address_data}}</p> -->
+
+  <div id="block-transactions">
+    <table class="table" id="transaction-input">
+      <caption style="caption-side:top">Transactions</caption>
+      <thead>
+        <tr>
+          <th scope="col">Block Time</th>
+          <th scope="col">In Block</th>
+          <th scope="col">Transaction</th>
+          <th scope="col">Sent</th>
+          <th scope="col">Received</th>
+          <th scope="col">Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for data in address_data %}
+          <tr>
+            <td>{{data.time| datetimefilter}}</th>
+            <td><a href="/blockno/{{data.block}}">{{data.block}}</a></th>
+            <td><a href="/tx/{{data.tx}}">{{data.tx}}</a></td>
+            <td>{{data.value_sent}}</th>
+            <td>{{data.value_received}}</th>
+              <td>{{data.value_change}}</th>
+          </tr>       
+        {% endfor %}    
+      </tbody>
+    </table>  
+  </div>  
+{% endblock %}
