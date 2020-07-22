@@ -12,7 +12,7 @@ from datetime import datetime
 app = Flask(__name__)
 # FlaskJSON(app)
 
-@app.route("/")
+@app.route("/", methods = ['POST', 'GET'])
 def route_home():
    print('app.route /')
    last_blocks = block.get_last_blocks(5)
@@ -20,7 +20,7 @@ def route_home():
 
    return render_template('new_blocks.html', blocks=last_blocks)
 
-@app.route("/block/<blockhash>")
+@app.route("/block/<blockhash>", methods = ['POST', 'GET'])
 def route_block(blockhash):
    print('app.route /block/<blockhash>')
    block_data = block.get_block(blockhash,None)
@@ -28,7 +28,7 @@ def route_block(blockhash):
 
    return render_template('block.html', block=block_data, txes=txes)  
 
-@app.route("/blockno/<height>")
+@app.route("/blockno/<height>", methods = ['POST', 'GET'])
 def route_block_no(height):
    print('app.route /blockno/<height>')
    block_data = block.get_block(None, height)
@@ -36,7 +36,7 @@ def route_block_no(height):
 
    return render_template('block.html', block=block_data, txes=txes)    
 
-@app.route("/tx/<txhash>")
+@app.route("/tx/<txhash>", methods = ['POST', 'GET'])
 def route_transaction(txhash):
    print('app.route /tx/<txhash>')
    tx = transaction.get_tx(txhash)
@@ -45,12 +45,71 @@ def route_transaction(txhash):
 
    return render_template('transaction.html', tx=tx, input=input_data, output=output_data)
 
-@app.route("/address/<p_address>")
+@app.route("/address/<p_address>", methods = ['POST', 'GET'])
 def route_address(p_address):
    print('app.route /address/<p_address>')
    address_data = address.get_txes_data(p_address)
 
    return render_template('address.html', address_data=address_data)
+
+#
+# Search button
+#    
+@app.route("/submit", methods = ['POST', 'GET'])
+def search_button():
+   search_input = "".encode('utf-8')
+   search_result = ""
+   for key, value in request.form.items():
+      # print("key: {0}, value: {1}".format(key, value))
+      search_input = value.encode('utf-8')
+
+   if search_input:
+      blockhash = search_input
+      print('blockhash')
+      block_data = block.get_block(blockhash,None)
+      txes = block.get_block_txes(blockhash,None) 
+      if block_data and txes:
+         print('blockhash block.html')
+         return render_template('block.html', block=block_data, txes=txes)
+      else:
+         print('blockheight')
+         blockheight = search_input
+         block_data = block.get_block(None,blockheight)
+         txes = block.get_block_txes(None,blockheight) 
+         if block_data and txes:
+            print('blockheight block.html')
+            return render_template('block.html', block=block_data, txes=txes)
+         else:
+            print('transaction')
+            try:
+               txhash = search_input
+               tx = transaction.get_tx(txhash)
+               input_data = transaction.get_input_data(txhash)
+               output_data = transaction.get_output_data(txhash)
+               if tx and input_data and output_data:
+                  return render_template('transaction.html', tx=tx, input=input_data, output=output_data)
+               else:
+                  try:
+                     print('address 1')
+                     address_input = search_input
+                     address_data = address.get_txes_data(address_input)
+                     if address_data:
+                        return render_template('address.html', address_data=address_data)
+                  except:
+                     pass
+            except:
+               try:
+                  print('address 2')
+                  address_input = search_input
+                  address_data = address.get_txes_data(address_input)
+                  if address_data:
+                     return render_template('address.html', address_data=address_data)
+               except:
+                  pass
+
+   last_blocks = block.get_last_blocks(5)
+   print('new_blocks.html')
+   return render_template('new_blocks.html', blocks=last_blocks)
 
 #
 #  Procedures for formating data in templates 

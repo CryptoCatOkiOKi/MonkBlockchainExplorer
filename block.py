@@ -12,12 +12,17 @@ def get_block(block_hash,height):
     """
     if block_hash is not None:
         block = db_blocks.find({"hash": block_hash})
-        block_sanitized = json.loads(json_util.dumps(block))[0]
-        return block_sanitized
     elif height is not None:
-        block = db_blocks.find({"height": int(height)})
-        block_sanitized = json.loads(json_util.dumps(block))[0]
-        return block_sanitized      
+        try:
+            block = db_blocks.find({"height": int(height)})
+        except:
+            return None
+
+    block_dump = json_util.dumps(block)
+    if block_dump and block_dump != '[]':
+        block_sanitized = json.loads(block_dump)[0]
+        return block_sanitized
+    return None
 
 def get_last_blocks(number_of_blocks):
     """
@@ -32,10 +37,17 @@ def get_block_txes(block_hash,height):
     """
     if block_hash is not None:
         block = db_blocks.find({"hash": block_hash})
-        block_sanitized = json.loads(json_util.dumps(block))[0]
     elif height is not None:
-        block = db_blocks.find({"height": int(height)})
-        block_sanitized = json.loads(json_util.dumps(block))[0]
+        try:
+            block = db_blocks.find({"height": int(height)})
+        except:
+            return None
+        
+    block_dump = json_util.dumps(block)
+    if block_dump and block_dump != '[]':
+        block_sanitized = json.loads(block_dump)[0]
+    else:
+        return None          
 
     txes = set()
 
